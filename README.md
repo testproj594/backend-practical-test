@@ -46,7 +46,8 @@ GET http://localhost:8080/employees/1
 
 
 3. Get Employees API
-====================
+**====================**
+
  The query parameters are optional (name & fromSalary & toSalary)
  If the name parameter is passed, the api should search for all employees that their first name or last name contains
 the search text.
