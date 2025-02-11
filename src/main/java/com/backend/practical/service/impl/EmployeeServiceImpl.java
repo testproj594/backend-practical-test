@@ -27,8 +27,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getEmployees(String name, Double fromSalary, Double toSalary) {
-        return employeeRepository.findAll().stream()
-                .filter(emp -> (name == null || emp.getFirstName().contains(name) || emp.getLastName().contains(name)))
+        List<Employee> employees = employeeRepository.findAll();
+
+        if (name != null && !name.isEmpty()) {
+            // If name is provided, return all matching employees (Ignore Salary Filters)
+            List<Employee> matchingEmployees = employees.stream()
+                    .filter(emp -> emp.getFirstName().toLowerCase().contains(name.toLowerCase())
+                            || emp.getLastName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+
+            // If matching employees found, return them (Ignore salary)
+            if (!matchingEmployees.isEmpty()) {
+                return matchingEmployees;
+            }
+        }
+
+        // If name is not matched or not provided, apply salary filters
+        return employees.stream()
                 .filter(emp -> (fromSalary == null || emp.getSalary() >= fromSalary))
                 .filter(emp -> (toSalary == null || emp.getSalary() <= toSalary))
                 .collect(Collectors.toList());
