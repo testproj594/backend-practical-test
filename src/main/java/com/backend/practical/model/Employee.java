@@ -21,7 +21,7 @@ public class Employee {
     private LocalDate dateOfBirth;
 
     @NotNull(message = "Salary is required")
-    @Min(value = 1, message = "Salary should not be zero or less")
+    @Min(value = 1000, message = "Salary must be at least 1,000")
     private Double salary;
 
     // Getters and Setters
