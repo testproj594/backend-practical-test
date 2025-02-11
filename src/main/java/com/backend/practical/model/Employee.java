@@ -1,29 +1,68 @@
 package com.backend.practical.model;
 
+import jakarta.validation.constraints.*;
+import java.time.LocalDate;
+
+
 public class Employee {
-    private int id;
+
+    private int id; // Will be generated automatically
+
+    @NotBlank(message = "First name is required")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "First name should contain only alphabets")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Last name should contain only alphabets")
     private String lastName;
-    private double salary;
 
-    public Employee() {}
+    @NotNull(message = "Date of Birth is required")
+    @Past(message = "Date of Birth must be a past date")
+    private LocalDate dateOfBirth;
 
-    public Employee(int id, String firstName, String lastName, double salary) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.salary = salary;
+    @NotNull(message = "Salary is required")
+    @Min(value = 1000, message = "Salary must be at least 1,000")
+    private Double salary;
+
+    // Getters and Setters
+
+    public int getId() {
+        return id;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public double getSalary() { return salary; }
-    public void setSalary(double salary) { this.salary = salary; }
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
 }
