@@ -6,7 +6,6 @@
 
 Sample JSON Request Body 1:
 {
-"id": 1,
 "firstName": "Barack",
 "lastName": "Obama",
 "salary": 55000.00
@@ -16,7 +15,6 @@ Expected Response : "Employee added successfully"
 
 Sample JSON Request Body 2:
 {
-"id": 2,
 "firstName": "Joe",
 "lastName": "Bidden",
 "salary": 72000.00
@@ -24,7 +22,6 @@ Sample JSON Request Body 2:
 
 Sample JSON Request Body 3:
 {
-"id": 3,
 "firstName": "Murugan",
 "lastName": "K",
 "salary": 60000.00

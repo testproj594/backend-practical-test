@@ -2,9 +2,7 @@ package com.backend.practical.controller;
 
 import com.backend.practical.model.Employee;
 import com.backend.practical.service.EmployeeService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,33 +15,29 @@ import java.util.Optional;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private static final Logger logger = LogManager.getLogger(EmployeeController.class);
-    private final EmployeeService service;
-
-    public EmployeeController(EmployeeService service) {
-        this.service = service;
-    }
+    @Autowired
+    private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> addEmployee(@RequestBody Employee employee) {
-        logger.info("Received request to add employee: {}", employee);
-        boolean isAdded = service.addEmployee(employee);
+    public ResponseEntity<Map<String, Integer>> createEmployee(@RequestBody Employee employee) {
+        Employee savedEmployee = employeeService.saveEmployee(employee);
 
-        Map<String, String> response = new HashMap<>();
-        if (!isAdded) {
-            response.put("message", "Employee with ID " + employee.getId() + " already exists.");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-        }
-        logger.info("Employee added successfully: {}", employee);
-        response.put("message", "Employee added successfully");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        // Create a response JSON with only the employee ID
+        Map<String, Integer> response = new HashMap<>();
+        response.put("id", savedEmployee.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable int id) {
-        Optional<Employee> employee = service.getEmployeeById(id);
-        return employee.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<?> getEmployeeById(@PathVariable int id) {
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
+
+        if (employee.isPresent()) {
+            return ResponseEntity.ok(employee.get());
+        } else {
+            return ResponseEntity.status(404).body("{\"message\": \"Employee with ID " + id + " does not exist.\"}");
+        }
     }
 
     @GetMapping
@@ -51,6 +45,6 @@ public class EmployeeController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Double fromSalary,
             @RequestParam(required = false) Double toSalary) {
-        return service.getEmployees(name, fromSalary, toSalary);
+        return employeeService.getEmployees(name, fromSalary, toSalary);
     }
 }
