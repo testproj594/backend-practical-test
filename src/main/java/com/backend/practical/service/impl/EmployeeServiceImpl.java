@@ -5,7 +5,6 @@ import com.backend.practical.repository.EmployeeRepository;
 import com.backend.practical.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,23 +27,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getEmployees(String name, Double fromSalary, Double toSalary) {
-        List<Employee> employees = employeeRepository.findAll();
-
-        if (name != null && !name.isEmpty()) {
-            // If name is provided, search for matches
-            List<Employee> matchingEmployees = employees.stream()
-                    .filter(emp -> emp.getFirstName().toLowerCase().contains(name.toLowerCase())
-                            || emp.getLastName().toLowerCase().contains(name.toLowerCase()))
-                    .collect(Collectors.toList());
-
-            // If matching employees are found, return them (Ignoring Salary)
-            if (!matchingEmployees.isEmpty()) {
-                return matchingEmployees;
-            }
-        }
-
-        // If name was not provided OR name didn't match, apply salary filters
-        return employees.stream()
+        return employeeRepository.findAll().stream()
+                .filter(emp -> (name == null || emp.getFirstName().contains(name) || emp.getLastName().contains(name)))
                 .filter(emp -> (fromSalary == null || emp.getSalary() >= fromSalary))
                 .filter(emp -> (toSalary == null || emp.getSalary() <= toSalary))
                 .collect(Collectors.toList());

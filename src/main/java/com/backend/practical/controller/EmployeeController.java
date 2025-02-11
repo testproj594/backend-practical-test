@@ -2,10 +2,8 @@ package com.backend.practical.controller;
 
 import com.backend.practical.model.Employee;
 import com.backend.practical.service.EmployeeService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -15,14 +13,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/employees")
-@Validated
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Integer>> createEmployee(@Valid @RequestBody Employee employee) {
+    public ResponseEntity<Map<String, Integer>> createEmployee(@RequestBody Employee employee) {
         Employee savedEmployee = employeeService.saveEmployee(employee);
 
         // Create a response JSON with only the employee ID
